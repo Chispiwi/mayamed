@@ -8,7 +8,7 @@ body {
 
 h1 {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   color: #222;
 }
 
@@ -26,7 +26,9 @@ h1 {
   padding: 10px;
   cursor: pointer;
   transition: 0.2s;
-  font-size: 14px;
+  font-size: 13px;
+  position: relative;
+  text-align: left;
 }
 
 .ramo.aprobado {
@@ -47,6 +49,7 @@ h1 {
 }
 
 .ramo .creditos {
-  font-size: 12px;
-  margin-top: 5px;
+  font-size: 11px;
+  margin-top: 6px;
+  color: #333;
 }
