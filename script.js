@@ -2,18 +2,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const ramos = document.querySelectorAll('.ramo');
     const approvedRamos = new Set(); // Para almacenar los IDs de los ramos aprobados
 
+    // Elementos de la interfaz para mostrar las estadísticas
+    const creditosAprobadosSpan = document.getElementById('creditos-aprobados');
+    const ramosAprobadosCountSpan = document.getElementById('ramos-aprobados-count');
+    const ramosRestantesCountSpan = document.getElementById('ramos-restantes-count');
+    const ramosTotalCountSpan = document.getElementById('ramos-total-count');
+
+    let totalRamos = 0;
+    let totalCreditosCarrera = 0;
+
+    // Calcular el total de ramos y créditos de la carrera una sola vez
+    ramos.forEach(ramo => {
+        totalRamos++;
+        const creditos = parseInt(ramo.dataset.creditos);
+        if (!isNaN(creditos)) {
+            totalCreditosCarrera += creditos;
+        }
+    });
+    ramosTotalCountSpan.textContent = totalRamos;
+
     // Carga el estado guardado de los ramos (si existe)
     loadApprovedRamos();
-    // Inicializa el estado de los ramos al cargar la página
-    updateRamoStates();
+    // Inicializa el estado de los ramos al cargar la página y actualiza las estadísticas
+    updateAllStates();
 
     ramos.forEach(ramo => {
         ramo.addEventListener('click', () => {
             const ramoId = ramo.id;
 
-            // Solo permite aprobar si no está ya aprobado o bloqueado
-            if (!ramo.classList.contains('aprobado') && !ramo.classList.contains('bloqueado')) {
-                // Verificar requisitos antes de aprobar
+            if (ramo.classList.contains('aprobado')) {
+                // Si el ramo ya está aprobado, desaprobamos
+                unapproveRamo(ramoId);
+            } else if (!ramo.classList.contains('bloqueado')) {
+                // Si no está aprobado ni bloqueado, intentamos aprobar
                 if (checkRequirements(ramoId)) {
                     approveRamo(ramoId);
                 } else {
@@ -29,8 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
             ramoElement.classList.add('aprobado');
             ramoElement.classList.remove('bloqueado');
             approvedRamos.add(ramoId);
-            saveApprovedRamos(); // Guarda el estado
-            updateRamoStates(); // Actualiza el estado de todos los ramos
+            saveApprovedRamos(); // Guarda el estado en localStorage
+            updateAllStates(); // Actualiza el estado de todos los ramos y las estadísticas
+        }
+    }
+
+    function unapproveRamo(ramoId) {
+        const ramoElement = document.getElementById(ramoId);
+        // Verificar si desaprobar este ramo bloqueará ramos ya aprobados que dependen de él
+        if (wouldUnapprovingBlockApprovedRamos(ramoId)) {
+            alert('No puedes desaprobar este ramo porque otros ramos ya aprobados dependen de él. Desaprueba primero los ramos dependientes.');
+            return;
+        }
+
+        if (ramoElement && ramoElement.classList.contains('aprobado')) {
+            ramoElement.classList.remove('aprobado');
+            approvedRamos.delete(ramoId); // Elimina el ID del ramo del Set
+            saveApprovedRamos(); // Guarda el estado actualizado en localStorage
+            updateAllStates(); // Actualiza el estado de todos los ramos y las estadísticas
         }
     }
 
@@ -64,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkPreviousSemestersApproved(numSemestres) {
         for (let i = 1; i <= numSemestres; i++) {
+            // Asumiendo que tus semestres tienen IDs como 'semestre-1', 'semestre-2', etc.
             const semestreElement = document.getElementById(`semestre-${i}`);
             if (semestreElement) {
                 const ramosInSemestre = semestreElement.querySelectorAll('.ramo');
@@ -72,31 +110,66 @@ document.addEventListener('DOMContentLoaded', () => {
                         return false; // Al menos un ramo en un semestre anterior no está aprobado
                     }
                 }
+            } else {
+                // Si un semestre previo no existe (no tiene ID o no está en el DOM),
+                // esto podría indicar un problema con la estructura del HTML
+                // o que se está pidiendo un semestre que no existe.
+                // Para la lógica de requisitos, si el semestre no se puede encontrar,
+                // asumimos que los requisitos no se cumplen para ese semestre.
+                return false;
             }
         }
         return true;
     }
 
-    function updateRamoStates() {
+    function wouldUnapprovingBlockApprovedRamos(unapprovedRamoId) {
+        for (const approvedRamoId of approvedRamos) {
+            if (approvedRamoId === unapprovedRamoId) continue; // No revisar el ramo que estamos intentando desaprobar
+
+            const ramoElement = document.getElementById(approvedRamoId);
+            const requisitosStr = ramoElement.dataset.requisitos;
+
+            if (requisitosStr) {
+                const requisitos = requisitosStr.split(',').map(req => req.trim());
+                if (requisitos.includes(unapprovedRamoId)) {
+                    return true; // Un ramo aprobado depende directamente del que queremos desaprobar
+                }
+            }
+        }
+        return false;
+    }
+
+    function updateAllStates() {
+        let currentCreditosAprobados = 0;
+        let currentRamosAprobados = 0;
+
         ramos.forEach(ramo => {
             const ramoId = ramo.id;
+            const creditosRamo = parseInt(ramo.dataset.creditos);
 
-            // Si ya está aprobado, mantener ese estado
-            if (isRamoApproved(ramoId)) {
+            // Si el ramo está en el Set de aprobados, se considera aprobado
+            if (approvedRamos.has(ramoId)) {
                 ramo.classList.add('aprobado');
                 ramo.classList.remove('bloqueado');
-                return; // No hacer más verificaciones para ramos ya aprobados
-            }
-
-            // Si no está aprobado, verificar si debe estar bloqueado
-            if (!checkRequirements(ramoId)) {
-                ramo.classList.add('bloqueado');
-                ramo.classList.remove('aprobado');
+                currentCreditosAprobados += creditosRamo;
+                currentRamosAprobados++;
             } else {
-                // Si los requisitos se cumplen, asegurarse de que no esté bloqueado
-                ramo.classList.remove('bloqueado');
+                // Si no está aprobado, verificar si debe estar bloqueado
+                if (!checkRequirements(ramoId)) {
+                    ramo.classList.add('bloqueado');
+                    ramo.classList.remove('aprobado');
+                } else {
+                    // Si los requisitos se cumplen, asegurarse de que no esté ni aprobado (si fue desaprobado) ni bloqueado
+                    ramo.classList.remove('bloqueado');
+                    ramo.classList.remove('aprobado'); // Asegurarse de que no tenga la clase aprobado si fue desaprobado
+                }
             }
         });
+
+        // Actualizar los textos de las estadísticas
+        creditosAprobadosSpan.textContent = currentCreditosAprobados;
+        ramosAprobadosCountSpan.textContent = currentRamosAprobados;
+        ramosRestantesCountSpan.textContent = totalRamos - currentRamosAprobados;
     }
 
     function saveApprovedRamos() {
