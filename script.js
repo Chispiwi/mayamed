@@ -1,87 +1,113 @@
-const ramos = [
-  // SOLO ALGUNOS EJEMPLOS — aquí debes pegar la lista completa de ramos desde el script que ya generamos
-  {
-    id: "QUIM020",
-    nombre: "Biología Humana I: Bases Biofísicas y Moleculares",
-    creditos: 12,
-    requisitos: [],
-    semestre: 1
-  },
-  {
-    id: "ESME001",
-    nombre: "Introducción a los Estudios Médicos y Primeros Auxilios",
-    creditos: 4,
-    requisitos: [],
-    semestre: 1
-  },
-  {
-    id: "ESME115",
-    nombre: "Biología Humana II: Bases Estructurales y Funcionales",
-    creditos: 24,
-    requisitos: ["QUIM020", "ESME001"],
-    semestre: 2
-  }
-  // Aquí irían los demás ramos (por motivos de espacio, solo se incluyen algunos en este ejemplo)
-];
+document.addEventListener('DOMContentLoaded', () => {
+    const ramos = document.querySelectorAll('.ramo');
+    const approvedRamos = new Set(); // Para almacenar los IDs de los ramos aprobados
 
-const estadoRamos = {};
+    // Carga el estado guardado de los ramos (si existe)
+    loadApprovedRamos();
+    // Inicializa el estado de los ramos al cargar la página
+    updateRamoStates();
 
-function guardarEstado() {
-  localStorage.setItem("ramosAprobados", JSON.stringify(estadoRamos));
-}
+    ramos.forEach(ramo => {
+        ramo.addEventListener('click', () => {
+            const ramoId = ramo.id;
 
-function cargarEstado() {
-  const datos = localStorage.getItem("ramosAprobados");
-  if (datos) {
-    Object.assign(estadoRamos, JSON.parse(datos));
-  }
-}
-
-function crearRamo(ramo) {
-  const div = document.createElement("div");
-  div.classList.add("ramo");
-
-  const requisitosCumplidos = ramo.requisitos.every(req => estadoRamos[req]);
-  if (ramo.requisitos.length && !requisitosCumplidos) {
-    div.classList.add("bloqueado");
-  }
-
-  div.dataset.id = ramo.id;
-  div.innerHTML = `
-    <div class="nombre">${ramo.nombre}</div>
-    <div class="creditos">${ramo.creditos} créditos</div>
-  `;
-
-  if (!div.classList.contains("bloqueado")) {
-    div.addEventListener("click", () => {
-      if (div.classList.contains("aprobado")) {
-        div.classList.remove("aprobado");
-        delete estadoRamos[ramo.id];
-      } else {
-        div.classList.add("aprobado");
-        estadoRamos[ramo.id] = true;
-      }
-      actualizarRamos();
-      guardarEstado();
+            // Solo permite aprobar si no está ya aprobado o bloqueado
+            if (!ramo.classList.contains('aprobado') && !ramo.classList.contains('bloqueado')) {
+                // Verificar requisitos antes de aprobar
+                if (checkRequirements(ramoId)) {
+                    approveRamo(ramoId);
+                } else {
+                    alert('Debes aprobar los requisitos previos para este ramo.');
+                }
+            }
+        });
     });
-  }
 
-  if (estadoRamos[ramo.id]) {
-    div.classList.add("aprobado");
-  }
+    function approveRamo(ramoId) {
+        const ramoElement = document.getElementById(ramoId);
+        if (ramoElement && !ramoElement.classList.contains('aprobado')) {
+            ramoElement.classList.add('aprobado');
+            ramoElement.classList.remove('bloqueado');
+            approvedRamos.add(ramoId);
+            saveApprovedRamos(); // Guarda el estado
+            updateRamoStates(); // Actualiza el estado de todos los ramos
+        }
+    }
 
-  return div;
-}
+    function isRamoApproved(ramoId) {
+        return approvedRamos.has(ramoId);
+    }
 
-function actualizarRamos() {
-  const grid = document.getElementById("malla");
-  grid.innerHTML = "";
+    function checkRequirements(ramoId) {
+        const ramoElement = document.getElementById(ramoId);
+        const requisitosStr = ramoElement.dataset.requisitos;
 
-  ramos.forEach((ramo) => {
-    const div = crearRamo(ramo);
-    grid.appendChild(div);
-  });
-}
+        if (!requisitosStr) {
+            return true; // No tiene requisitos
+        }
 
-cargarEstado();
-actualizarRamos();
+        const requisitos = requisitosStr.split(',').map(req => req.trim());
+
+        // Manejar requisitos especiales como "X_PRIM_SEM_APROBADOS"
+        for (const req of requisitos) {
+            if (req.endsWith('_PRIM_SEM_APROBADOS')) {
+                const numSemestres = parseInt(req.split('_')[0]);
+                if (!checkPreviousSemestersApproved(numSemestres)) {
+                    return false;
+                }
+            } else if (!isRamoApproved(req)) {
+                return false; // Requisito no aprobado
+            }
+        }
+        return true;
+    }
+
+    function checkPreviousSemestersApproved(numSemestres) {
+        for (let i = 1; i <= numSemestres; i++) {
+            const semestreElement = document.getElementById(`semestre-${i}`);
+            if (semestreElement) {
+                const ramosInSemestre = semestreElement.querySelectorAll('.ramo');
+                for (const ramo of ramosInSemestre) {
+                    if (!isRamoApproved(ramo.id)) {
+                        return false; // Al menos un ramo en un semestre anterior no está aprobado
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    function updateRamoStates() {
+        ramos.forEach(ramo => {
+            const ramoId = ramo.id;
+
+            // Si ya está aprobado, mantener ese estado
+            if (isRamoApproved(ramoId)) {
+                ramo.classList.add('aprobado');
+                ramo.classList.remove('bloqueado');
+                return; // No hacer más verificaciones para ramos ya aprobados
+            }
+
+            // Si no está aprobado, verificar si debe estar bloqueado
+            if (!checkRequirements(ramoId)) {
+                ramo.classList.add('bloqueado');
+                ramo.classList.remove('aprobado');
+            } else {
+                // Si los requisitos se cumplen, asegurarse de que no esté bloqueado
+                ramo.classList.remove('bloqueado');
+            }
+        });
+    }
+
+    function saveApprovedRamos() {
+        localStorage.setItem('approvedRamosValdivia', JSON.stringify(Array.from(approvedRamos)));
+    }
+
+    function loadApprovedRamos() {
+        const savedRamos = localStorage.getItem('approvedRamosValdivia');
+        if (savedRamos) {
+            const parsedRamos = JSON.parse(savedRamos);
+            parsedRamos.forEach(ramoId => approvedRamos.add(ramoId));
+        }
+    }
+});
