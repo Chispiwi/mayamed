@@ -29,17 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
     ramos.forEach(ramo => {
         ramo.addEventListener('click', () => {
             const ramoId = ramo.id;
+            console.log(`Clic en ramo: ${ramoId}`);
 
             if (ramo.classList.contains('aprobado')) {
+                console.log(`Ramo ${ramoId} tiene la clase 'aprobado'. Intentando desaprobar.`);
                 // Si el ramo ya está aprobado, desaprobamos
                 unapproveRamo(ramoId);
             } else if (!ramo.classList.contains('bloqueado')) {
+                console.log(`Ramo ${ramoId} no está aprobado ni bloqueado. Comprobando requisitos.`);
                 // Si no está aprobado ni bloqueado, intentamos aprobar
                 if (checkRequirements(ramoId)) {
+                    console.log(`Requisitos de ${ramoId} cumplidos. Aprobando.`);
                     approveRamo(ramoId);
                 } else {
+                    console.log(`Requisitos de ${ramoId} NO cumplidos. Mostrando alerta.`);
                     alert('Debes aprobar los requisitos previos para este ramo.');
                 }
+            } else {
+                console.log(`Ramo ${ramoId} está bloqueado.`);
             }
         });
     });
@@ -57,18 +64,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function unapproveRamo(ramoId) {
         const ramoElement = document.getElementById(ramoId);
+        console.log(`--- Iniciando unapproveRamo para: ${ramoId} ---`);
+
         // Verificar si desaprobar este ramo bloqueará ramos ya aprobados que dependen de él
         if (wouldUnapprovingBlockApprovedRamos(ramoId)) {
+            console.log(`Alerta: No se puede desaprobar ${ramoId} porque bloquea ramos aprobados.`);
             alert('No puedes desaprobar este ramo porque otros ramos ya aprobados dependen de él. Desaprueba primero los ramos dependientes.');
             return;
         }
 
         if (ramoElement && ramoElement.classList.contains('aprobado')) {
+            console.log(`Desaprobando ${ramoId} y actualizando estado.`);
             ramoElement.classList.remove('aprobado');
             approvedRamos.delete(ramoId); // Elimina el ID del ramo del Set
             saveApprovedRamos(); // Guarda el estado actualizado en localStorage
             updateAllStates(); // Actualiza el estado de todos los ramos y las estadísticas
         }
+        console.log(`--- Fin unapproveRamo para: ${ramoId} ---`);
     }
 
     function isRamoApproved(ramoId) {
