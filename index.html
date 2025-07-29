@@ -1,17 +1,399 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Medicina UACh – Valdivia</title>
-  <link rel="stylesheet" href="estilos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular Medicina - UACh Valdivia</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <h1>Malla Curricular Medicina UACh – Valdivia</h1>
-  <p style="text-align:center; font-style: italic; color: #555;">
-    Haz clic en los ramos para marcarlos como aprobados. Se desbloquearán automáticamente los siguientes.
-  </p>
-  <div id="malla" class="grid"></div>
-  <script src="script.js" defer></script>
+    <header>
+        <h1>Malla Curricular Medicina - Universidad Austral de Chile (Sede Valdivia)</h1>
+        <p>Haz clic en cada ramo para "aprobarlo" y desbloquear los siguientes.</p>
+    </header>
+
+    <main id="malla-curricular">
+        <section class="semestre" id="semestre-1">
+            <h2>Semestre I</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="CID1080" data-requisitos="">
+                    <h3>INGLES PARA LA SALUD I</h3>
+                    <p>HT: 1, HP: 3</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="DYRE060" data-requisitos="">
+                    <h3>EDUCACION FISICA Y SALUD</h3>
+                    <p>HT: 0, HP: 4</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="ESME001" data-requisitos="">
+                    <h3>INTRODUCCION A LOS ESTUDIOS MEDICOS Y PRIMEROS AUXILIOS</h3>
+                    <p>HT: 0, HP: 3</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="QUIM020" data-requisitos="">
+                    <h3>BIOLOGIA HUMANAI BASES BIOFISICAS Y MOLECULARES</h3>
+                    <p>HT: 9, HP: 3</p>
+                    <p class="creditos">Créditos: 12</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-2">
+            <h2>Semestre II</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESME115" data-requisitos="QUIM020,ESME001">
+                    <h3>BIOLOGIA HUMANA II. BASES ESTRUCTURALES Y FUNCIONALES</h3>
+                    <p>HT: 14, HP: 10</p>
+                    <p class="creditos">Créditos: 24</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-3">
+            <h2>Semestre III</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESME125" data-requisitos="ESME115">
+                    <h3>BIOLOGIA HUMANA III: BASES BIOQUIMICAS, INMUNOLOGICAS Y FARMACOLOGICAS</h3>
+                    <p>HT: 13, HP: 5</p>
+                    <p class="creditos">Créditos: 18</p>
+                </div>
+                <div class="ramo" id="ESME240" data-requisitos="ESME115">
+                    <h3>NEUROCIENCIAS</h3>
+                    <p>HT: 6, HP: 2</p>
+                    <p class="creditos">Créditos: 8</p>
+                </div>
+                <div class="ramo" id="PED1130" data-requisitos="">
+                    <h3>HACIENDO SALUD</h3>
+                    <p>HT: 1, HP: 0</p>
+                    <p class="creditos">Créditos: 1</p>
+                </div>
+                <div class="ramo" id="PSIO134" data-requisitos="">
+                    <h3>PSICOANTROPOLOGIA MEDICA</h3>
+                    <p>HT: 1, HP: 1</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="SALP132" data-requisitos="">
+                    <h3>INTRODUCCIÓN A LA SALUD PÚBLICA</h3>
+                    <p>HT: 2, HP: 2</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-4">
+            <h2>Semestre IV</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESME120" data-requisitos="ESME125">
+                    <h3>AGRESION Y RESPUESTA</h3>
+                    <p>HT: 5, HP: 4</p>
+                    <p class="creditos">Créditos: 9</p>
+                </div>
+                <div class="ramo" id="ESME140" data-requisitos="ESME125">
+                    <h3>FISIOPATOLOGIA DE SISTEMAS INTEGRADOSI: ENDOCRINO, REPRODUCTOR, LOCOMOTOR, DIGESTIVO</h3>
+                    <p>HT: 0, HP: 3</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="SALP142" data-requisitos="SALP132">
+                    <h3>SALUD PUBLICA APLICADA</h3>
+                    <p>HT: 2, HP: 2</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-5">
+            <h2>Semestre V</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESME133" data-requisitos="ESME240,ESME120,ESME140">
+                    <h3>RESPUESTA ORGANICA MULTISISTÉMICA</h3>
+                    <p>HT: 2, HP: 1</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="ESME155" data-requisitos="ESME240,ESME120,ESME140">
+                    <h3>FISIOPATOLOGIA DE SISTEMAS INTEGRADOS II: RENAL RESPIRATORIO, CARDIOVASCULAR</h3>
+                    <p>HT: 13, HP: 4</p>
+                    <p class="creditos">Créditos: 17</p>
+                </div>
+                <div class="ramo" id="HIPA121" data-requisitos="ESME125">
+                    <h3>PATOLOGIA MOLECULAR</h3>
+                    <p>HT: 4, HP: 1</p>
+                    <p class="creditos">Créditos: 5</p>
+                </div>
+                <div class="ramo" id="MEDI155" data-requisitos="4_PRIM_SEM_APROBADOS">
+                    <h3>SEMIOLOGIA MEDICA INTEGRADA</h3>
+                    <p>HT: 3, HP: 0</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="PSIQ135" data-requisitos="">
+                    <h3>BIOETICAI</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="SALP192" data-requisitos="SALP142">
+                    <h3>INVESTIGACIÓN EPIDEMIOLOGICA APLICADA</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-6">
+            <h2>Semestre VI</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="MED1234" data-requisitos="MEDI155,HIPA121,ESME133,ESME155">
+                    <h3>CLINICA MEDICA</h3>
+                    <p>HT: 12, HP: 12</p>
+                    <p class="creditos">Créditos: 24</p>
+                </div>
+                <div class="ramo" id="SALP172" data-requisitos="SALP192">
+                    <h3>MEDICINA FAMILIAR Y COMUNITARIA</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-7">
+            <h2>Semestre VII</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESPE277" data-requisitos="MED1234">
+                    <h3>OFTALMOLOGIA</h3>
+                    <p>HT: 3, HP: 0</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="ESPE278" data-requisitos="MED1234">
+                    <h3>OTORRINOLARINGOLOGIA</h3>
+                    <p>HT: 3, HP: 0</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="MEDI242" data-requisitos="MED1234">
+                    <h3>CLINICA MEDICA II</h3>
+                    <p>HT: 10, HP: 12</p>
+                    <p class="creditos">Créditos: 22</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-8">
+            <h2>Semestre VIII</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="CIRU263" data-requisitos="MEDI242">
+                    <h3>CIRUGIA GENERAL Y DE URGENCIA</h3>
+                    <p>HT: 10, HP: 7</p>
+                    <p class="creditos">Créditos: 17</p>
+                </div>
+                <div class="ramo" id="DPUB172" data-requisitos="">
+                    <h3>ANTROPOLOGIA JURIDICO PENAL</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="NEUR271" data-requisitos="MEDI242">
+                    <h3>NEUROLOGIA Y NEUROCIRUGIA</h3>
+                    <p>HT: 3, HP: 3</p>
+                    <p class="creditos">Créditos: 6</p>
+                </div>
+                <div class="ramo" id="PSIQ235" data-requisitos="PSIQ135">
+                    <h3>BIOETICA II</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="SALP242" data-requisitos="SALP172">
+                    <h3>POLITICAS Y GESTIÓN DE SERVICIOS DE SALUD</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-9">
+            <h2>Semestre IX</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="APLO249" data-requisitos="NEUR271,CIRU263">
+                    <h3>PATOLOGIA DEL APARATO LOCOMOTOR</h3>
+                    <p>HT: 0, HP: 1</p>
+                    <p class="creditos">Créditos: 1</p>
+                </div>
+                <div class="ramo" id="ESPE280" data-requisitos="MEDI242">
+                    <h3>DERMATOLOGIA</h3>
+                    <p>HT: 2, HP: 1</p>
+                    <p class="creditos">Créditos: 3</p>
+                </div>
+                <div class="ramo" id="PED1259" data-requisitos="NEUR271,CIRU263">
+                    <h3>CIRUGIA INFANTIL</h3>
+                    <p>HT: 4, HP: 0</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="PED1261" data-requisitos="NEUR271,CIRU263">
+                    <h3>PEDIATRIA</h3>
+                    <p>HT: 8, HP: 10</p>
+                    <p class="creditos">Créditos: 18</p>
+                </div>
+                <div class="ramo" id="PSIQ245" data-requisitos="PSIQ235">
+                    <h3>BIOETICA III</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="PSIQ263" data-requisitos="MED1242,NEUR271">
+                    <h3>PSICOPATOLOGIA Y PSIQUIATRIA</h3>
+                    <p>HT: 4, HP: 2</p>
+                    <p class="creditos">Créditos: 6</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-10">
+            <h2>Semestre X</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESME250" data-requisitos="9_PRIM_SEM_APROBADOS">
+                    <h3>INTRODUCCION AL INTERNADO</h3>
+                    <p>HT: 3, HP: 1</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="ESPE248" data-requisitos="MED1242">
+                    <h3>MEDICINA LEGAL</h3>
+                    <p>HT: 2, HP: 0</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="ESPE250" data-requisitos="CIRU263">
+                    <h3>UROLOGIA</h3>
+                    <p>HT: 1, HP: 1</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="OBG1268" data-requisitos="MEDI242">
+                    <h3>OBSTETRICIA Y GINECOLOGIA</h3>
+                    <p>HT: 8, HP: 15</p>
+                    <p class="creditos">Créditos: 23</p>
+                </div>
+                <div class="ramo" id="PSIQ264" data-requisitos="PSIQ263">
+                    <h3>PSICOPATOLOGIA Y PSIQUIATRIA II</h3>
+                    <p>HT: 0, HP: 2</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-11">
+            <h2>Semestre XI - Ciclo Internados</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="APLO295" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE ORTOPEDIA Y TRAUMATOLOGIA</h3>
+                    <p>HT: 0, HP: 8</p>
+                    <p class="creditos">Créditos: 8</p>
+                </div>
+                <div class="ramo" id="CIRU296" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE CIRUGIA</h3>
+                    <p>HT: 0, HP: 22</p>
+                    <p class="creditos">Créditos: 22</p>
+                </div>
+                <div class="ramo" id="ESME299" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE ATENCION PRIMARIA Y ADMINISTRACION EN SALUD</h3>
+                    <p>HT: 0, HP: 11</p>
+                    <p class="creditos">Créditos: 11</p>
+                </div>
+                <div class="ramo" id="ESPE266" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE UROLOGIA</h3>
+                    <p>HT: 0, HP: 4</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="PREG293" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>PREGRADO CIRUGIA</h3>
+                    <p>HT: 0, HP: 0</p>
+                    <p class="creditos">Créditos: 0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-12">
+            <h2>Semestre XII - Ciclo Internados</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ESPE251" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE ANESTESIA</h3>
+                    <p>HT: 0, HP: 8</p>
+                    <p class="creditos">Créditos: 8</p>
+                </div>
+                <div class="ramo" id="ESPE257" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE OFTALMOLOGIA</h3>
+                    <p>HT: 0, HP: 0</p>
+                    <p class="creditos">Créditos: 0</p>
+                </div>
+                <div class="ramo" id="ESPE265" data-requisitos="11_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE OTORRINOLARINGOLOGIA</h3>
+                    <p>HT: 0, HP: 0</p>
+                    <p class="creditos">Créditos: 0</p>
+                </div>
+                <div class="ramo" id="ESPE270" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE ONCOLOGIA Y CUIDADOS PALIATIVOS</h3>
+                    <p>HT: 0, HP: 4</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="ESPE281" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE DERMATOLOGIA</h3>
+                    <p>HT: 0, HP: 4</p>
+                    <p class="creditos">Créditos: 4</p>
+                </div>
+                <div class="ramo" id="OBG1294" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE OBSTETRICIA Y GINECOLOGIA</h3>
+                    <p>HT: 0, HP: 22</p>
+                    <p class="creditos">Créditos: 22</p>
+                </div>
+                <div class="ramo" id="PREG294" data-requisitos="10_PRIM_SEM_APROBADOS">
+                    <h3>PREGRADO OBSTETRICIA Y GINECOLOGIA</h3>
+                    <p>HT: 0, HP: 1</p>
+                    <p class="creditos">Créditos: 1</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-13">
+            <h2>Semestre XIII - Ciclo Internados</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="MEDI296" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO MEDICINA INTERNA</h3>
+                    <p>HT: 0, HP: 37</p>
+                    <p class="creditos">Créditos: 37</p>
+                </div>
+                <div class="ramo" id="NEUR291" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE NEUROLOGIA Y NEUROCIRUGIA</h3>
+                    <p>HT: 0, HP: 8</p>
+                    <p class="creditos">Créditos: 8</p>
+                </div>
+                <div class="ramo" id="PREG296" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>PREGRADO MEDICINA INTERNA</h3>
+                    <p>HT: 0, HP: 1</p>
+                    <p class="creditos">Créditos: 1</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="semestre" id="semestre-14">
+            <h2>Semestre XIV - Ciclo Internados</h2>
+            <div class="ramos-container">
+                <div class="ramo" id="ELECT01" data-requisitos="13_PRIM_SEM_APROBADOS">
+                    <h3>OPTATIVO 1</h3>
+                    <p>HT: 0, HP: 0</p>
+                    <p class="creditos">Créditos: 0</p>
+                </div>
+                <div class="ramo" id="PED1294" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE PEDIATRIA</h3>
+                    <p>HT: 0, HP: 30</p>
+                    <p class="creditos">Créditos: 30</p>
+                </div>
+                <div class="ramo" id="PREG292" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>PREGRADO PEDIATRIA</h3>
+                    <p>HT: 1, HP: 1</p>
+                    <p class="creditos">Créditos: 2</p>
+                </div>
+                <div class="ramo" id="PSIQ270" data-requisitos="12_PRIM_SEM_APROBADOS">
+                    <h3>INTERNADO DE PSIQUIATRIA</h3>
+                    <p>HT: 0, HP: 8</p>
+                    <p class="creditos">Créditos: 8</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
